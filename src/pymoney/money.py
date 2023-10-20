@@ -23,5 +23,14 @@ class Money:
     def __bool__(self) -> bool:
         return bool(self.cents)
 
-    def __abs__(self) -> "Money":
+    def __abs__(self) -> Money:
         return Money(abs(self.cents), self.currency)
+
+    def __mul__(self, scalar: float) -> Money:
+        return Money(int(self.cents * scalar), self.currency)
+
+    def __rmul__(self, scalar: float) -> Money:
+        return self * scalar
+
+    def __truediv__(self, scalar: float) -> Money:
+        return Money(int(self.cents / scalar), self.currency)
