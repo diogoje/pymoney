@@ -158,7 +158,7 @@ max-branches = 24
 max-returns = 12
 max-statements = 100
 max-args = 15
-allow-magic-value-types = ["str", "bytes", "complex", "float", "int", "tuple"]
+allow-magic-value-types = ["str", "bytes", "complex", "float", "int"]
 
 
 [tool.pyright]
