@@ -140,4 +140,5 @@
     ],
     "python.analysis.autoImportCompletions": true,
     "workbench.editor.empty.hint": "hidden",
+    "python.linting.pycodestyleArgs": ["--max-line-length=120"],
 }
