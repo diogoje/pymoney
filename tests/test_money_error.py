@@ -8,7 +8,7 @@ def test_money_type_error(dollars_0: Money) -> None:
     validate_money_type(dollars_0)
 
     with pytest.raises(MoneyTypeError):
-        validate_money_type(10_00)
+        validate_money_type(10_00)  # type: ignore
 
 
 @pytest.mark.parametrize(
@@ -27,10 +27,10 @@ def test_currency_error(
 
 def test_money_methods_raising_errors(dollars_10: Money, euros_1: Money) -> None:
     with pytest.raises(MoneyTypeError):
-        dollars_10 + 1_00
+        _ = dollars_10 + 1_00  # type: ignore
 
     with pytest.raises(CurrencyError):
-        dollars_10 - euros_1
+        _ = dollars_10 - euros_1
 
     with pytest.raises(MoneyTypeError):
-        dollars_10 > 1_00
+        _ = dollars_10 > 1_00  # type: ignore
