@@ -6,15 +6,19 @@ from pymoney import Money
 
 
 @pytest.mark.parametrize(
-    ("money", "expected"),
+    ("money_fixture_name", "expected_str"),
     (("dollars_0", "0.00$"), ("dollars_5", "5.00$"), ("dollars_negative_5", "-5.00$"), ("euros_0_50", "0.50€")),
 )
-def test_money_string_representation(money: str, expected: str, request: pytest.FixtureRequest) -> None:
-    assert str(request.getfixturevalue(money)) == expected
+def test_money_string_representation(
+    money_fixture_name: str, expected_str: str, request: pytest.FixtureRequest
+) -> None:
+    money: Money = request.getfixturevalue(money_fixture_name)
+
+    assert str(money) == expected_str
 
 
 @pytest.mark.parametrize(
-    ("first_amount", "second_amount", "expected"),
+    ("first_amount_fixture_name", "second_amount_fixture_name", "expected_money_fixture_name"),
     (
         ("dollars_0", "dollars_5", "dollars_5"),
         ("dollars_5", "dollars_5", "dollars_10"),
@@ -22,14 +26,21 @@ def test_money_string_representation(money: str, expected: str, request: pytest.
         ("euros_0_50", "euros_0_50", "euros_1"),
     ),
 )
-def test_money_addition(first_amount: str, second_amount: str, expected: str, request: pytest.FixtureRequest) -> None:
-    assert request.getfixturevalue(first_amount) + request.getfixturevalue(second_amount) == request.getfixturevalue(
-        expected
-    )
+def test_money_addition(
+    first_amount_fixture_name: str,
+    second_amount_fixture_name: str,
+    expected_money_fixture_name: str,
+    request: pytest.FixtureRequest,
+) -> None:
+    first_amount: Money = request.getfixturevalue(first_amount_fixture_name)
+    second_amount: Money = request.getfixturevalue(second_amount_fixture_name)
+    expected_money: Money = request.getfixturevalue(expected_money_fixture_name)
+
+    assert first_amount + second_amount == expected_money
 
 
 @pytest.mark.parametrize(
-    ("first_amount", "second_amount", "expected"),
+    ("first_amount_fixture_name", "second_amount_fixture_name", "expected_money_fixture_name"),
     (
         ("dollars_5", "dollars_0", "dollars_5"),
         ("dollars_5", "dollars_5", "dollars_0"),
@@ -38,37 +49,56 @@ def test_money_addition(first_amount: str, second_amount: str, expected: str, re
     ),
 )
 def test_money_subtraction(
-    first_amount: str, second_amount: str, expected: str, request: pytest.FixtureRequest
+    first_amount_fixture_name: str,
+    second_amount_fixture_name: str,
+    expected_money_fixture_name: str,
+    request: pytest.FixtureRequest,
 ) -> None:
-    assert request.getfixturevalue(first_amount) - request.getfixturevalue(second_amount) == request.getfixturevalue(
-        expected
-    )
+    first_amount: Money = request.getfixturevalue(first_amount_fixture_name)
+    second_amount: Money = request.getfixturevalue(second_amount_fixture_name)
+    expected_money: Money = request.getfixturevalue(expected_money_fixture_name)
+
+    assert first_amount - second_amount == expected_money
 
 
 @pytest.mark.parametrize(
-    ("money", "expected"),
+    ("money_fixture_name", "expected_money_fixture_name"),
     (("dollars_0", "dollars_0"), ("dollars_negative_5", "dollars_5"), ("dollars_5", "dollars_negative_5")),
 )
-def test_negative_money(money: str, expected: str, request: pytest.FixtureRequest) -> None:
-    assert -request.getfixturevalue(money) == request.getfixturevalue(expected)
+def test_negative_money(
+    money_fixture_name: str, expected_money_fixture_name: str, request: pytest.FixtureRequest
+) -> None:
+    money: Money = request.getfixturevalue(money_fixture_name)
+    expected_money: Money = request.getfixturevalue(expected_money_fixture_name)
+
+    assert -money == expected_money
 
 
 @pytest.mark.parametrize(
-    ("money", "expected"), (("dollars_0", False), ("dollars_5", True), ("dollars_negative_5", True), ("euros_1", True))
+    ("money_fixture_name", "expected"),
+    (("dollars_0", False), ("dollars_5", True), ("dollars_negative_5", True), ("euros_1", True)),
 )
-def test_boolean_value_money(money: str, expected: bool, request: pytest.FixtureRequest) -> None:
-    assert bool(request.getfixturevalue(money)) == expected
+def test_boolean_value_money(money_fixture_name: str, expected: bool, request: pytest.FixtureRequest) -> None:
+    money: Money = request.getfixturevalue(money_fixture_name)
+
+    assert bool(money) == expected
 
 
 @pytest.mark.parametrize(
-    ("money", "expected"), (("dollars_0", "dollars_0"), ("dollars_negative_5", "dollars_5"), ("euros_1", "euros_1"))
+    ("money_fixture_name", "expected_money_fixture_name"),
+    (("dollars_0", "dollars_0"), ("dollars_negative_5", "dollars_5"), ("euros_1", "euros_1")),
 )
-def test_absolute_money(money: str, expected: str, request: pytest.FixtureRequest) -> None:
-    assert abs(request.getfixturevalue(money)) == request.getfixturevalue(expected)
+def test_absolute_money(
+    money_fixture_name: str, expected_money_fixture_name: str, request: pytest.FixtureRequest
+) -> None:
+    money: Money = request.getfixturevalue(money_fixture_name)
+    expected_money: Money = request.getfixturevalue(expected_money_fixture_name)
+
+    assert abs(money) == expected_money
 
 
 @pytest.mark.parametrize(
-    ("money", "scalar", "expected"),
+    ("money_fixture_name", "scalar", "expected_money_fixture_name"),
     (
         ("dollars_0", 0.8, "dollars_0"),
         ("dollars_5", 0.0, "dollars_0"),
@@ -77,12 +107,17 @@ def test_absolute_money(money: str, expected: str, request: pytest.FixtureReques
         ("euros_1", 1.0, "euros_1"),
     ),
 )
-def test_money_multiplication(money: str, scalar: float, expected: str, request: pytest.FixtureRequest) -> None:
-    assert request.getfixturevalue(money) * scalar == request.getfixturevalue(expected)
+def test_money_multiplication(
+    money_fixture_name: str, scalar: float, expected_money_fixture_name: str, request: pytest.FixtureRequest
+) -> None:
+    money: Money = request.getfixturevalue(money_fixture_name)
+    expected_money: Money = request.getfixturevalue(expected_money_fixture_name)
+
+    assert money * scalar == expected_money
 
 
 @pytest.mark.parametrize(
-    ("money", "scalar", "expected"),
+    ("money_fixture_name", "scalar", "expected_money_fixture_name"),
     (
         ("dollars_0", 0.8, "dollars_0"),
         ("dollars_10", 2.0, "dollars_5"),
@@ -90,8 +125,13 @@ def test_money_multiplication(money: str, scalar: float, expected: str, request:
         ("euros_1", 1.0, "euros_1"),
     ),
 )
-def test_money_division(money: str, scalar: float, expected: str, request: pytest.FixtureRequest) -> None:
-    assert request.getfixturevalue(money) / scalar == request.getfixturevalue(expected)
+def test_money_division(
+    money_fixture_name: str, scalar: float, expected_money_fixture_name: str, request: pytest.FixtureRequest
+) -> None:
+    money: Money = request.getfixturevalue(money_fixture_name)
+    expected_money: Money = request.getfixturevalue(expected_money_fixture_name)
+
+    assert money / scalar == expected_money
 
 
 def test_compare_money(dollars_0: Money, dollars_negative_5: Money, dollars_5: Money) -> None:
