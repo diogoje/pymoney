@@ -94,6 +94,12 @@ def test_money_division(money: str, scalar: float, expected: str, request: pytes
     assert request.getfixturevalue(money) / scalar == request.getfixturevalue(expected)
 
 
+def test_compare_money(dollars_0: Money, dollars_negative_5: Money, dollars_5: Money) -> None:
+    assert dollars_0 == dollars_0
+    assert dollars_0 > dollars_negative_5
+    assert dollars_0 < dollars_5
+
+
 @given(builds(Money, integers()), builds(Money, integers()))
 def test_money_instance_after_operation(first_amount: Money, second_amount: Money) -> None:
     assert isinstance(first_amount + second_amount, Money)
