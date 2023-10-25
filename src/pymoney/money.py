@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import total_ordering
 
 
 @dataclass
+@total_ordering
 class Money:
     cents: int
     currency: str = "$"
@@ -34,3 +36,6 @@ class Money:
 
     def __truediv__(self, scalar: float) -> Money:
         return Money(int(self.cents / scalar), self.currency)
+
+    def __lt__(self, other: Money) -> bool:
+        return self.cents < other.cents
